@@ -24,7 +24,7 @@
 #define WP_MAX_PACKET 4096
 
 typedef struct _WP_DEVICE_CONTEXT {
-    BTHDDI_PROFILE_DRIVER_INTERFACE Profile;
+    BTH_PROFILE_DRIVER_INTERFACE Profile;
     WDFSPINLOCK Lock;
     BOOLEAN Connected;
     BTH_ADDR RemoteAddress;

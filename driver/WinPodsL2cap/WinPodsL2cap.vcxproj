@@ -39,7 +39,7 @@
   <ItemGroup>
     <ClCompile Include="driver.c" />
     <ClInclude Include="public.h" />
-    <Inf Include="WinPodsL2cap.inf" />
+    <None Include="WinPodsL2cap.inf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
