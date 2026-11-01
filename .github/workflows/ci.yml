@@ -50,3 +50,17 @@ jobs:
         with:
           name: WinPodsAgent-macOS
           path: mac/WinPodsAgent/WinPodsAgent.app
+
+  driver:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Build WinPodsL2cap (KMDF)
+        run: msbuild driver\WinPodsL2cap\WinPodsL2cap.vcxproj /p:Configuration=Release /p:Platform=x64 /v:m
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: WinPodsL2cap-unsigned
+          path: driver/WinPodsL2cap/**/x64/Release/**
+          if-no-files-found: warn
