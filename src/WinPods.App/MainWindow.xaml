@@ -1,0 +1,139 @@
+<Window x:Class="WinPods.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WinPods" Width="520" Height="760" MinWidth="440"
+        Background="{StaticResource WindowBg}" FontFamily="Segoe UI" FontSize="13"
+        WindowStartupLocation="CenterScreen">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+
+            <!-- Header -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="↻" ToolTip="Buscar dispositivos" Margin="0"
+                                Command="{Binding RefreshDevicesCommand}"/>
+                        <StackPanel>
+                            <TextBlock Text="{Binding DeviceName}" FontSize="22" FontWeight="SemiBold"/>
+                            <TextBlock Foreground="{StaticResource Muted}">
+                                <Run Text="{Binding ModelName, Mode=OneWay}"/>
+                                <Run Text="  "/>
+                                <Run Text="{Binding ConnectionText, Mode=OneWay}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                    <ComboBox Margin="0,12,0,0" ItemsSource="{Binding PairedDevices}" SelectedItem="{Binding SelectedDevice}"
+                              ToolTip="AirPods emparejados con este PC"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Battery -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Batería" Style="{StaticResource SectionTitle}"/>
+                    <UniformGrid Columns="3">
+                        <StackPanel DataContext="{Binding Left}" Margin="0,0,8,0">
+                            <TextBlock Text="{Binding Label}" Foreground="{StaticResource Muted}"/>
+                            <TextBlock Text="{Binding Text}" FontSize="24" FontWeight="SemiBold"/>
+                            <ProgressBar Height="6" Maximum="1" Value="{Binding Fraction, Mode=OneWay}" Foreground="{StaticResource Good}"/>
+                            <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{Binding Right}" Margin="4,0">
+                            <TextBlock Text="{Binding Label}" Foreground="{StaticResource Muted}"/>
+                            <TextBlock Text="{Binding Text}" FontSize="24" FontWeight="SemiBold"/>
+                            <ProgressBar Height="6" Maximum="1" Value="{Binding Fraction, Mode=OneWay}" Foreground="{StaticResource Good}"/>
+                            <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{Binding Case}" Margin="8,0,0,0">
+                            <TextBlock Text="{Binding Label}" Foreground="{StaticResource Muted}"/>
+                            <TextBlock Text="{Binding Text}" FontSize="24" FontWeight="SemiBold"/>
+                            <ProgressBar Height="6" Maximum="1" Value="{Binding Fraction, Mode=OneWay}" Foreground="{StaticResource Good}"/>
+                            <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <TextBlock Margin="0,10,0,0" Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"
+                               Text="Abre el estuche cerca del PC si no aparece la batería del estuche."/>
+                </StackPanel>
+            </Border>
+
+            <!-- Noise control -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Control de ruido" Style="{StaticResource SectionTitle}"/>
+                    <WrapPanel IsEnabled="{Binding AapConnected}">
+                        <Button Style="{StaticResource ModeButton}" Content="Cancelación" Tag="{Binding IsAnc}"
+                                Command="{Binding SetNoiseModeCommand}" CommandParameter="NoiseCancellation"/>
+                        <Button Style="{StaticResource ModeButton}" Content="Adaptativo" Tag="{Binding IsAdaptive}"
+                                Command="{Binding SetNoiseModeCommand}" CommandParameter="Adaptive"/>
+                        <Button Style="{StaticResource ModeButton}" Content="Transparencia" Tag="{Binding IsTransparency}"
+                                Command="{Binding SetNoiseModeCommand}" CommandParameter="Transparency"/>
+                        <Button Style="{StaticResource ModeButton}" Content="Desactivado" Tag="{Binding IsOff}"
+                                Command="{Binding SetNoiseModeCommand}" CommandParameter="Off"/>
+                    </WrapPanel>
+                    <StackPanel Margin="0,12,0,0" IsEnabled="{Binding AapConnected}">
+                        <CheckBox Content="Detección de conversaciones" IsChecked="{Binding ConversationalAwareness}" Margin="0,0,0,6"/>
+                        <CheckBox Content="Volumen personalizado (adaptativo)" IsChecked="{Binding AdaptiveVolume}" Margin="0,0,0,6"/>
+                        <TextBlock Text="Audio adaptativo: menos ruido ⟷ más ruido" Foreground="{StaticResource Muted}"/>
+                        <Slider Minimum="0" Maximum="100" Value="{Binding AdaptiveNoise, Delay=400}" IsSnapToTickEnabled="True" TickFrequency="5"/>
+                    </StackPanel>
+                    <Border Margin="0,10,0,0" Padding="10" CornerRadius="6" Background="#FFF6E0"
+                            Visibility="{Binding AapSupported, Converter={StaticResource InverseBoolToVisibility}}">
+                        <TextBlock Text="{Binding AapUnavailableReason}" TextWrapping="Wrap" FontSize="12"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Handoff -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Cambio automático con el Mac" Style="{StaticResource SectionTitle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Traer audio a este PC" Command="{Binding PullHereCommand}"/>
+                        <Button Content="Enviar audio al Mac" Command="{Binding PushToPeerCommand}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding HandoffStatus}" TextWrapping="Wrap" Foreground="{StaticResource Muted}" Margin="0,0,0,10"/>
+
+                    <Expander Header="Configuración">
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.ColumnSpan="2" Content="Activar handoff con el Mac" IsChecked="{Binding HandoffEnabled}" Margin="0,0,0,8"/>
+
+                            <TextBlock Grid.Row="1" Text="Mac (host o IP)" VerticalAlignment="Center" Margin="0,0,10,6"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PeerHost, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,6"
+                                     ToolTip="Ej.: MacBook-de-Ana.local o 192.168.1.20"/>
+
+                            <TextBlock Grid.Row="2" Text="Puerto" VerticalAlignment="Center" Margin="0,0,10,6"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding PeerPort, UpdateSourceTrigger=PropertyChanged}" Width="80"
+                                     HorizontalAlignment="Left" Margin="0,0,0,6"/>
+
+                            <TextBlock Grid.Row="3" Text="Código de enlace" VerticalAlignment="Center" Margin="0,0,10,6"/>
+                            <DockPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,6">
+                                <Button DockPanel.Dock="Right" Content="Generar" Margin="6,0,0,0" Command="{Binding GenerateSecretCommand}"/>
+                                <TextBox Text="{Binding SharedSecret, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas"
+                                         ToolTip="El mismo código debe ponerse en el agente del Mac"/>
+                            </DockPanel>
+
+                            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,6,0,0">
+                                <Button Content="Guardar" Command="{Binding SaveHandoffCommand}"/>
+                                <Button Content="Probar conexión" Command="{Binding TestPeerCommand}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Expander>
+                </StackPanel>
+            </Border>
+
+            <CheckBox Content="Iniciar con Windows (en la bandeja)" IsChecked="{Binding StartWithWindows}" Margin="4,0,0,8"/>
+            <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" Foreground="#C0392B" Margin="4,0"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
