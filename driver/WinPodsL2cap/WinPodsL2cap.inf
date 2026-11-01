@@ -1,0 +1,64 @@
+; WinPodsL2cap.inf — L2CAP client for AirPods (Apple Accessory Protocol, PSM 0x1001)
+;
+; Matches the BTHENUM child that Windows creates for the AirPods' Apple-specific SDP
+; service record (UUID 74ec2172-0bad-4d01-8f77-997b2be0722a, vendor 0x004C).
+; UNVERIFIED: check the real hardware ID in Device Manager > AirPods > Details > Hardware Ids
+; and adjust the line in [WinPods.NTamd64] if it differs.
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = Bluetooth
+ClassGuid   = {e0cbf06c-cd8b-4647-bb8a-263b43f0f974}
+Provider    = %ManufacturerName%
+CatalogFile = WinPodsL2cap.cat
+DriverVer   = 11/01/2026,0.1.0.0
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+WinPodsL2cap.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName% = WinPods,NTamd64
+
+[WinPods.NTamd64]
+%DeviceDesc% = WinPods_Install, BTHENUM\{74ec2172-0bad-4d01-8f77-997b2be0722a}_VID&0001004c
+
+[WinPods_Install.NT]
+CopyFiles = WinPods_Drivers
+
+[WinPods_Drivers]
+WinPodsL2cap.sys
+
+[WinPods_Install.NT.HW]
+AddReg = WinPods_HW
+
+[WinPods_HW]
+HKR,,"Security",,"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;IU)"
+
+[WinPods_Install.NT.Services]
+AddService = WinPodsL2cap, 0x00000002, WinPods_Service
+
+[WinPods_Service]
+DisplayName    = %ServiceDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %13%\WinPodsL2cap.sys
+
+[WinPods_Install.NT.Wdf]
+KmdfService = WinPodsL2cap, WinPods_wdfsect
+
+[WinPods_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+ManufacturerName = "WinPods"
+DiskName         = "WinPods L2CAP driver"
+DeviceDesc       = "WinPods AirPods control channel"
+ServiceDesc      = "WinPods L2CAP driver"
