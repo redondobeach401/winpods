@@ -1,0 +1,32 @@
+name: Informe de error
+description: Algo no funciona como debería
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Qué ha pasado
+      description: Qué esperabas y qué ocurrió.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducirlo
+    validations:
+      required: true
+  - type: input
+    id: airpods
+    attributes:
+      label: Modelo de AirPods y versión de firmware
+      placeholder: AirPods Pro 2 (USB-C), 7E93
+  - type: input
+    id: os
+    attributes:
+      label: Windows / macOS
+      placeholder: Windows 11 24H2, macOS 15.1
+  - type: dropdown
+    id: area
+    attributes:
+      label: Componente
+      options: [Batería, Control de ruido, Handoff Windows ⇄ Mac, Agente de macOS, Otro]

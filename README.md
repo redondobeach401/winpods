@@ -1,5 +1,9 @@
 # WinPods
 
+[![CI](https://github.com/redondobeach401/winpods/actions/workflows/ci.yml/badge.svg)](https://github.com/redondobeach401/winpods/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/redondobeach401/winpods/actions/workflows/codeql.yml/badge.svg)](https://github.com/redondobeach401/winpods/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 App para usar **AirPods Pro 2** (y otros AirPods) en **Windows**: batería en la bandeja del
 sistema, controles de ruido y **paso del audio entre Windows y Mac**, al estilo del cambio
 automático entre iPhone, iPad y Mac.
@@ -96,6 +100,15 @@ La lógica está en `WinPods.Core` y se puede probar en cualquier SO:
 ```bash
 dotnet test tests/WinPods.Core.Tests
 ```
+
+## Contribuir y seguridad
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · [CHANGELOG.md](CHANGELOG.md)
+- Vulnerabilidades: [SECURITY.md](SECURITY.md) (de forma privada, no en issues).
+
+## Licencia
+
+[MIT](LICENSE).
 
 ## Créditos
 

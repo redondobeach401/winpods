@@ -4,6 +4,13 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   windows:
     runs-on: windows-latest
@@ -12,7 +19,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet build WinPods.sln -c Release
+      - run: dotnet build WinPods.sln -c Release -warnaserror:NU1901,NU1902,NU1903,NU1904
+      - name: Vulnerable NuGet packages
+        shell: pwsh
+        run: |
+          $out = dotnet list WinPods.sln package --vulnerable --include-transitive 2>&1 | Out-String
+          Write-Output $out
+          if ($out -match 'has the following vulnerable packages') { exit 1 }
       - run: dotnet test tests/WinPods.Core.Tests -c Release --no-build
       - run: dotnet publish src/WinPods.App -c Release -r win-x64 --self-contained false -o publish
       - uses: actions/upload-artifact@v4
