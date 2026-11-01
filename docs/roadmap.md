@@ -7,7 +7,7 @@
 | Batería izquierdo / derecho / estuche, carga, en el oído | ✅ | Anuncios BLE de Apple (pasos de 10 %) |
 | Icono en la bandeja con el % de batería | ✅ | |
 | Pasar audio Windows ⇄ Mac (manual, botón o menú) | ✅ | Protocolo de handoff + agente para macOS |
-| Cancelación de ruido / transparencia / adaptativo | ⏳ | Protocolo implementado en `WinPods.Core`, falta transporte L2CAP |
+| Cancelación de ruido / transparencia / adaptativo | 🧪 | Protocolo + driver `driver/WinPodsL2cap` + `DriverAapTransport` escritos; **sin probar con hardware** |
 | Detección de conversaciones, volumen personalizado, nivel adaptativo | ⏳ | Igual |
 | Batería exacta (1 %) | ⏳ | Igual (viene por AAP) |
 
@@ -22,8 +22,7 @@ hace falta un **driver de perfil Bluetooth en modo kernel (KMDF)** que:
 2. Abra el canal con `BRB_L2CA_OPEN_CHANNEL` (PSM 0x1001), basado en el ejemplo `bthecho` del WDK.
 3. Exponga una interfaz de dispositivo con IOCTLs de lectura/escritura de paquetes.
 
-En la app solo hay que añadir una clase `DriverAapTransport : IAapTransport` que hable con ese
-driver; `AapSession`, la UI y el menú de la bandeja ya están listos y se activan solos.
+Hecho (sin probar): `driver/WinPodsL2cap` y `DriverAapTransport`. Ver `driver/README.md`.
 
 Requisitos prácticos: WDK + Visual Studio, firma de pruebas (`bcdedit /set testsigning on`)
 mientras no haya firma EV/atestación de Microsoft.
