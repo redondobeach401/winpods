@@ -2,8 +2,9 @@
 ;
 ; Matches the BTHENUM child that Windows creates for the AirPods' Apple-specific SDP
 ; service record (UUID 74ec2172-0bad-4d01-8f77-997b2be0722a, vendor 0x004C).
-; UNVERIFIED: check the real hardware ID in Device Manager > AirPods > Details > Hardware Ids
-; and adjust the line in [WinPods.NTamd64] if it differs.
+; Verified on AirPods Pro (PID 2014): the device's Hardware Ids are
+; BTHENUM\{74ec2172-...}_VID&0001004c_PID&2014 and ..._LOCALMFG&0046, and its Compatible Ids
+; include BTHENUM\{74ec2172-...}, which is what the line in [WinPods.NTamd64] matches (any model).
 
 [Version]
 Signature   = "$WINDOWS NT$"
@@ -27,7 +28,7 @@ WinPodsL2cap.sys = 1,,
 %ManufacturerName% = WinPods,NTamd64
 
 [WinPods.NTamd64]
-%DeviceDesc% = WinPods_Install, BTHENUM\{74ec2172-0bad-4d01-8f77-997b2be0722a}_VID&0001004c
+%DeviceDesc% = WinPods_Install, BTHENUM\{74ec2172-0bad-4d01-8f77-997b2be0722a}
 
 [WinPods_Install.NT]
 CopyFiles = WinPods_Drivers
