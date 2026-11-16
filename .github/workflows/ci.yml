@@ -15,8 +15,8 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
       - run: dotnet build WinPods.sln -c Release -warnaserror:NU1901,NU1902,NU1903,NU1904
@@ -28,7 +28,7 @@ jobs:
           if ($out -match 'has the following vulnerable packages') { exit 1 }
       - run: dotnet test tests/WinPods.Core.Tests -c Release --no-build
       - run: dotnet publish src/WinPods.App -c Release -r win-x64 --self-contained false -o publish
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: WinPods-win-x64
           path: publish
@@ -36,7 +36,7 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build agent
         working-directory: mac/WinPodsAgent
         run: swift build -c release
@@ -46,7 +46,7 @@ jobs:
       - name: Bundle .app
         working-directory: mac/WinPodsAgent
         run: ./build-app.sh
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: WinPodsAgent-macOS
           path: mac/WinPodsAgent/WinPodsAgent.app
@@ -54,8 +54,8 @@ jobs:
   driver:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
-      - uses: microsoft/setup-msbuild@v2
+      - uses: actions/checkout@v7
+      - uses: microsoft/setup-msbuild@v3
       - name: Build WinPodsL2cap (KMDF)
         shell: pwsh
         run: |
@@ -63,7 +63,7 @@ jobs:
           $code = $LASTEXITCODE
           Select-String -Path build.log -Pattern ' error | warning ' | Select-Object -First 30 | ForEach-Object { $_.Line -replace '\[.*\]$','' }
           exit $code
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: WinPodsL2cap-unsigned
