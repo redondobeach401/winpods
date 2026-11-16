@@ -25,7 +25,7 @@ public partial class App : Application
             return;
         }
 
-        _viewModel = new MainViewModel(AppSettings.Load(), Dispatcher);
+        _viewModel = new MainViewModel(AppSettings.Load(), Dispatcher, () => new DriverAapTransport());
         _tray = new TrayIcon(_viewModel, ShowWindow, ExitApp);
 
         if (!e.Args.Contains("--tray")) ShowWindow();
