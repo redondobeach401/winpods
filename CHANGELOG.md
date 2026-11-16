@@ -4,6 +4,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); v
 
 ## [Sin publicar]
 
+### Añadido
+- Driver KMDF `WinPodsL2cap` (experimental, modo de pruebas): abre el canal L2CAP de los AirPods
+  y permite cambiar Cancelación / Adaptativo / Transparencia / Desactivado desde la app.
+
+### Corregido
+- El INF del driver ahora enlaza con el dispositivo real de los AirPods (id. compatible
+  `BTHENUM\{74ec2172-…}`); antes usaba un id. de hardware que no existe.
+
 ## [0.1.0] - 2026-11-01
 
 ### Añadido
